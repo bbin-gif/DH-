@@ -12,9 +12,9 @@
 
 주요 기술 스택: Python (KoNLPy), Chart.js, Tailwind CSS, HTML5
 
----
-
 ## 📅 프로젝트 여정 (Sections)
+
+---
 
 # 01. 기획 배경 (Planning)
 
@@ -28,7 +28,9 @@
 
 Python KoNLPy를 활용한 형태소 분석 및 데이터 전처리.
 
-#02. 데이터 분석 결과 (Analysis)
+---
+
+# 02. 데이터 분석 결과 (Analysis)
 
 대중의 인식을 과거, 현재, 미래의 타임라인으로 분석한 결과입니다.
 
@@ -38,7 +40,9 @@ Python KoNLPy를 활용한 형태소 분석 및 데이터 전처리.
 
 미래 (Future): 47.4% 긍정. 변화의 계기(MRO 산업, 북극항로 등)가 주어진다면 지지하겠다는 기대감 확인.
 
-#03. 결과물 (Outcomes)
+---
+
+# 03. 결과물 (Outcomes)
 
 📖 디지털 스토리북
 
