@@ -62,7 +62,7 @@ Python KoNLPy를 활용한 형태소 분석 및 데이터 전처리.
 
 영상 시청하기 (Google Drive)
 
-🛠 주요 기능
+* 🛠 주요 기능
 
 Responsive Web: Tailwind CSS를 활용한 모바일/데스크탑 최적화 랜딩페이지.
 
@@ -70,7 +70,7 @@ Data Visualization: Chart.js를 이용한 감성 분석 결과 시각화.
 
 Interactive UI: 원페이지 라우팅 기능을 통한 유연한 콘텐츠 탐색.
 
-⚖️ 저작권 및 문의
+* ⚖️ 저작권 및 문의
 
 © 2024 영도구 조선업 인식 조사 프로젝트. All rights reserved.
 
