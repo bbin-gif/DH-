@@ -1,1 +1,58 @@
+        <!-- 02. ANALYSIS SECTION -->
+        <section id="analysis" class="section-content pt-32 pb-20 max-w-7xl mx-auto px-4">
+            <div class="border-b-2 border-rust-500 pb-4 mb-12">
+                <h2 class="text-4xl font-bold text-navy-900">02. Data Analysis</h2>
+                <p class="text-slate-500 mt-2">과거/현재/미래의 데이터로 읽는 영도의 맥박</p>
+            </div>
 
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center border border-slate-200">
+                    <div class="text-xs text-slate-400 font-bold uppercase mb-2">과거 감성</div>
+                    <div class="text-3xl font-black text-navy-900">중립/긍정</div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center border border-slate-200">
+                    <div class="text-xs text-slate-400 font-bold uppercase mb-2">현재 부정 여론</div>
+                    <div class="text-3xl font-black text-red-500">39.2%</div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center border border-slate-200">
+                    <div class="text-xs text-slate-400 font-bold uppercase mb-2">미래 기대감</div>
+                    <div class="text-3xl font-black text-green-500">47.4%</div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center border border-slate-200">
+                    <div class="text-xs text-slate-400 font-bold uppercase mb-2">핵심 감정</div>
+                    <div class="text-3xl font-black text-rust-500">그리움 & 비전</div>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-navy-900 mb-8">Timeline Sentiment Analysis</h3>
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-bold text-lg text-navy-900">과거 (Past)</h4>
+                        <span class="text-xs font-bold bg-slate-100 px-2 py-1 rounded">회상/그리움</span>
+                    </div>
+                    <div class="h-48 relative"><canvas id="pastChart"></canvas></div>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-bold text-lg text-navy-900">현재 (Present)</h4>
+                        <span class="text-xs font-bold bg-slate-100 px-2 py-1 rounded">소멸/위험</span>
+                    </div>
+                    <div class="h-48 relative"><canvas id="presentChart"></canvas></div>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-bold text-lg text-navy-900">미래 (Future)</h4>
+                        <span class="text-xs font-bold bg-slate-100 px-2 py-1 rounded">기대/변화</span>
+                    </div>
+                    <div class="h-48 relative"><canvas id="futureChart"></canvas></div>
+                </div>
+            </div>
+
+            <div class="flex justify-between">
+                <button onclick="router('planning')" class="text-slate-500 font-bold hover:text-navy-900"><i class="fa-solid fa-arrow-left mr-2"></i> 이전</button>
+                <button onclick="router('storybook')" class="bg-navy-900 text-white px-8 py-4 rounded-full font-bold hover:bg-rust-500 transition-all shadow-lg">
+                    다음: 스토리북 <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </section>
