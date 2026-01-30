@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>잠든 쇳소리를 깨울 고동 - 영도구 조선업 프로젝트</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 900: '#0f172a', 800: '#1e293b' },
+                        rust: { 500: '#c2410c', 600: '#9a3412' },
+                        steel: { 50: '#f8fafc', 100: '#f1f5f9' }
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:ital,wght@1,700&display=swap');
+        body { font-family: 'Noto Sans KR', sans-serif; }
+        
+        /* Hero Section Background */
+        .hero-bg {
+            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), url('https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?q=80&w=2073&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Section Transition Animation */
+        .section-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .section-content.active {
+            display: block;
+            opacity: 1;
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Nav Item Active State */
+        .nav-link.active {
+            color: #c2410c; /* rust-500 */
+            border-bottom: 2px solid #c2410c;
+        }
+    </style>
+</head>
+<body class="bg-steel-50 text-slate-800">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-navy-900/95 backdrop-blur-md text-white z-50 h-20 flex items-center shadow-lg transition-all duration-300">
+        <div class="max-w-7xl mx-auto w-full px-4 flex justify-between items-center">
+            <button onclick="router('home')" class="flex items-center group">
+                <i class="fa-solid fa-anchor text-rust-500 text-2xl mr-3 group-hover:rotate-45 transition-transform duration-300"></i>
+                <div class="text-left">
+                    <h1 class="font-bold text-xl tracking-wider leading-none">잠든 쇳소리</h1>
+                    <span class="text-[10px] text-slate-400 tracking-widest group-hover:text-white transition-colors">PROJECT YEONGDO</span>
+                </div>
+            </button>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8 text-sm font-medium">
+                <button onclick="router('planning')" id="nav-planning" class="nav-link hover:text-rust-500 py-2 transition-colors">기획 (01)</button>
+                <button onclick="router('analysis')" id="nav-analysis" class="nav-link hover:text-rust-500 py-2 transition-colors">데이터분석 (02)</button>
+                <button onclick="router('storybook')" id="nav-storybook" class="nav-link hover:text-rust-500 py-2 transition-colors">스토리북 (03)</button>
+                <button onclick="router('video')" id="nav-video" class="nav-link hover:text-rust-500 py-2 transition-colors">영상보기 (04)</button>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-white hover:text-rust-500" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="hidden fixed inset-0 z-40 bg-navy-900 pt-24 px-6 md:hidden">
+        <div class="flex flex-col space-y-6 text-white text-lg font-bold">
+            <button onclick="router('planning'); toggleMobileMenu()" class="text-left py-2 border-b border-white/10">01. 기획</button>
+            <button onclick="router('analysis'); toggleMobileMenu()" class="text-left py-2 border-b border-white/10">02. 데이터분석</button>
+            <button onclick="router('storybook'); toggleMobileMenu()" class="text-left py-2 border-b border-white/10">03. 스토리북</button>
+            <button onclick="router('video'); toggleMobileMenu()" class="text-left py-2 border-b border-white/10">04. 영상보기</button>
+            <button onclick="toggleMobileMenu()" class="mt-8 text-sm text-slate-400"><i class="fa-solid fa-xmark mr-2"></i>닫기</button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main>
+
+        <!-- ========================================== -->
+        <!-- HOME SECTION (Intro) -->
+        <!-- ========================================== -->
+        <section id="home" class="section-content active">
+            <div class="hero-bg h-screen flex items-center justify-center text-white text-center px-4 relative">
+                <div class="max-w-4xl z-10">
+                    <span class="inline-block px-4 py-1 border border-rust-500 text-rust-500 font-bold rounded-full mb-6 animate-pulse">2024 Yeongdo Archive Project</span>
+                    <h1 class="text-5xl md:text-7xl font-serif font-black mb-8 leading-tight drop-shadow-2xl">
+                        부산 영도 조선 산업,<br>
+                        <span class="text-rust-500 italic">다시 맥박을 기록하다</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-slate-200 mb-12 leading-relaxed max-w-2xl mx-auto font-light">
+                        데이터로 분석한 조선업 쇠퇴의 현실과 시민들의 목소리.<br>
+                        과거의 기억과 미래의 비전을 연결하여 적극적인 협력을 유도합니다.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="router('planning')" class="bg-rust-500 hover:bg-rust-600 text-white px-8 py-4 rounded-full font-bold transition-all shadow-lg shadow-rust-500/30 transform hover:-translate-y-1">
+                            프로젝트 시작하기 <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                        <button onclick="router('video')" class="bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm border border-white/30 px-8 py-4 rounded-full font-bold transition-all">
+                            다큐멘터리 시청 <i class="fa-solid fa-play ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Scroll Down Indicator -->
+                <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-slate-400">
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+            </div>
+
+            <!-- Dashboard Summary Preview -->
+            <div class="py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="grid md:grid-cols-4 gap-8 text-center">
+                        <div class="p-6">
+                            <i class="fa-brands fa-youtube text-4xl text-red-500 mb-4"></i>
+                            <h3 class="font-bold text-navy-900">데이터 수집</h3>
+                            <p class="text-sm text-slate-500 mt-2">유튜브 & 뉴스 빅데이터</p>
+                        </div>
+                        <div class="p-6">
+                            <i class="fa-solid fa-brain text-4xl text-blue-500 mb-4"></i>
+                            <h3 class="font-bold text-navy-900">AI 분석</h3>
+                            <p class="text-sm text-slate-500 mt-2">Gemini 감성/키워드 분석</p>
+                        </div>
+                        <div class="p-6">
+                            <i class="fa-solid fa-book-open text-4xl text-green-500 mb-4"></i>
+                            <h3 class="font-bold text-navy-900">아카이빙</h3>
+                            <p class="text-sm text-slate-500 mt-2">인터랙티브 스토리북</p>
+                        </div>
+                        <div class="p-6">
+                            <i class="fa-solid fa-film text-4xl text-rust-500 mb-4"></i>
+                            <h3 class="font-bold text-navy-900">영상화</h3>
+                            <p class="text-sm text-slate-500 mt-2">다큐멘터리 제작</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 01. PLANNING SECTION -->
+        <!-- ========================================== -->
+        <section id="planning" class="section-content pt-32 pb-20 max-w-7xl mx-auto px-4">
+            <div class="border-b-2 border-rust-500 pb-4 mb-12 flex flex-col md:flex-row md:items-end md:justify-between">
+                <div>
+                    <h2 class="text-4xl font-bold text-navy-900">01. Project Planning</h2>
+                    <p class="text-slate-500 mt-2">기획 배경, 타겟 분석 및 연구 방법론</p>
+                </div>
+                <div class="mt-4 md:mt-0 bg-rust-500 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md">
+                    Target: 대학생, 시민, 청소년
+                </div>
+            </div>
+
+            <!-- Core Message -->
+            <div class="mb-16 bg-navy-900 text-white p-10 rounded-3xl shadow-2xl relative overflow-hidden">
+                <div class="relative z-10">
+                    <h3 class="text-rust-500 font-bold mb-4 tracking-widest uppercase text-xs">Core Message</h3>
+                    <p class="text-2xl md:text-3xl font-bold leading-tight">
+                        "영도 조선 산업 쇠퇴의 심각성을 인지하고,<br>
+                        과거의 기억과 미래의 비전을 연결하여<br>
+                        <span class="text-rust-500 underline decoration-white underline-offset-8">적극적인 협력과 관심</span>을 유도함"
+                    </p>
+                </div>
+                <i class="fa-solid fa-quote-right absolute bottom-4 right-8 text-8xl text-white/5"></i>
+            </div>
+
+            <!-- Why & Mission -->
+            <div class="grid md:grid-cols-2 gap-12 mb-20">
+                <div class="space-y-8">
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-rust-500">
+                        <h3 class="text-2xl font-bold mb-4 text-navy-900">Why Yeongdo?</h3>
+                        <p class="text-slate-600 leading-relaxed">
+                            영도구의 심장인 조선업은 단순한 산업을 넘어 지역의 정체성입니다. 하지만 장기 불황으로 쇠퇴하며 지역 공동화와 활력 저하라는 심각한 위기에 직면했습니다. 우리는 이 쇠퇴가 '끝'이 아닌 '새로운 연결'이 필요하다는 신호임을 알리고자 합니다.
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-slate-200 rounded-2xl overflow-hidden relative min-h-[300px]">
+                    <img src="https://images.unsplash.com/photo-1569420959275-6e5428a1da13?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" alt="영도 대교">
+                    <div class="absolute inset-0 bg-navy-900/40 flex items-center justify-center">
+                        <p class="text-white font-serif text-xl font-bold text-center p-4">"녹슨 쇠는 버려지는 것이 아니라,<br>시간의 깊이를 입은 것이다."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Methodology Cards -->
+            <h3 class="text-2xl font-bold text-navy-900 mb-8">Data Collection & Analysis</h3>
+            <div class="grid md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="text-xs font-bold text-blue-600 bg-blue-50 inline-block px-2 py-1 rounded mb-3">DATA SOURCE 01</div>
+                    <h4 class="font-bold text-lg mb-2">과거: 다큐멘터리</h4>
+                    <p class="text-sm text-slate-500">KBS 다큐 3일 등 수리 조선소 전성기 영상 댓글 분석</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="text-xs font-bold text-red-600 bg-red-50 inline-block px-2 py-1 rounded mb-3">DATA SOURCE 02</div>
+                    <h4 class="font-bold text-lg mb-2">현재: 뉴스 보도</h4>
+                    <p class="text-sm text-slate-500">빈집, 인구 소멸 등 쇠퇴 문제 관련 뉴스 기사 및 반응 분석</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="text-xs font-bold text-green-600 bg-green-50 inline-block px-2 py-1 rounded mb-3">DATA SOURCE 03</div>
+                    <h4 class="font-bold text-lg mb-2">미래: 산업 전망</h4>
+                    <p class="text-sm text-slate-500">MRO 산업 유치 및 미래 비전 관련 여론조사 데이터</p>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="router('analysis')" class="bg-navy-900 text-white px-8 py-4 rounded-full font-bold hover:bg-rust-500 transition-all shadow-lg hover:-translate-y-1">
+                    다음: 데이터 분석 결과 <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 02. ANALYSIS SECTION -->
+        <!-- ========================================== -->
+        <section id="analysis" class="section-content pt-32 pb-20 max-w-7xl mx-auto px-4">
+            <div class="border-b-2 border-rust-500 pb-4 mb-12">
+                <h2 class="text-4xl font-bold text-navy-900">02. Data Analysis</h2>
+                <p class="text-slate-500 mt-2">타임라인별(과거/현재/미래) 감성 분석 및 키워드 시각화</p>
+            </div>
+
+            <!-- Dashboard Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center border border-slate-200">
+                    <div class="text-xs text-slate-400 font-bold uppercase mb-2">분석 데이터</div>
+                    <div class="text-3xl font-black text-navy-900">1,248건</div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center border border-slate-200">
+                    <div class="text-xs text-slate-400 font-bold uppercase mb-2">현재 부정 여론</div>
+                    <div class="text-3xl font-black text-red-500">58%</div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center border border-slate-200">
+                    <div class="text-xs text-slate-400 font-bold uppercase mb-2">미래 기대감</div>
+                    <div class="text-3xl font-black text-green-500">65%</div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center border border-slate-200">
+                    <div class="text-xs text-slate-400 font-bold uppercase mb-2">핵심 감정</div>
+                    <div class="text-3xl font-black text-rust-500">상실 & 희망</div>
+                </div>
+            </div>
+
+            <!-- Timeline Charts -->
+            <h3 class="text-2xl font-bold text-navy-900 mb-8">Timeline Sentiment Analysis</h3>
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <!-- Past Chart -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-bold text-lg text-navy-900">과거 (Past)</h4>
+                        <span class="text-xs font-bold bg-slate-100 px-2 py-1 rounded">회상/기억</span>
+                    </div>
+                    <div class="h-48 relative"><canvas id="pastChart"></canvas></div>
+                    <p class="mt-4 text-sm text-slate-600 text-center"><span class="font-bold text-slate-500">#중립 우세</span> (사실적 기억)</p>
+                </div>
+                <!-- Present Chart -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-bold text-lg text-navy-900">현재 (Present)</h4>
+                        <span class="text-xs font-bold bg-slate-100 px-2 py-1 rounded">우려/심각</span>
+                    </div>
+                    <div class="h-48 relative"><canvas id="presentChart"></canvas></div>
+                    <p class="mt-4 text-sm text-slate-600 text-center"><span class="font-bold text-red-500">#부정 우세</span> (인구소멸/빈집)</p>
+                </div>
+                <!-- Future Chart -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-bold text-lg text-navy-900">미래 (Future)</h4>
+                        <span class="text-xs font-bold bg-slate-100 px-2 py-1 rounded">기대/비전</span>
+                    </div>
+                    <div class="h-48 relative"><canvas id="futureChart"></canvas></div>
+                    <p class="mt-4 text-sm text-slate-600 text-center"><span class="font-bold text-green-500">#긍정 우세</span> (MRO/기술)</p>
+                </div>
+            </div>
+
+            <!-- Word Clouds Layout -->
+            <h3 class="text-2xl font-bold text-navy-900 mb-8">Keyword Visualization</h3>
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <h4 class="font-bold mb-4 text-rust-500">과거/회상 주요 키워드</h4>
+                    <div class="aspect-video bg-slate-100 rounded-xl flex items-center justify-center relative overflow-hidden">
+                         <div class="text-center p-6">
+                            <span class="text-4xl font-black text-navy-900 m-2 inline-block">깡깡이</span>
+                            <span class="text-2xl font-bold text-slate-600 m-2 inline-block">수리조선소</span>
+                            <span class="text-3xl font-bold text-rust-600 m-2 inline-block">영도다리</span>
+                            <span class="text-xl text-slate-500 m-2 inline-block">대평동</span>
+                            <span class="text-xl text-slate-500 m-2 inline-block">추억</span>
+                         </div>
+                         <div class="absolute inset-0 bg-white/10 backdrop-blur-[1px]"></div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <h4 class="font-bold mb-4 text-blue-600">미래/기술 주요 키워드</h4>
+                    <div class="aspect-video bg-slate-100 rounded-xl flex items-center justify-center relative overflow-hidden">
+                         <div class="text-center p-6">
+                            <span class="text-4xl font-black text-blue-900 m-2 inline-block">기술혁신</span>
+                            <span class="text-3xl font-bold text-blue-600 m-2 inline-block">MRO</span>
+                            <span class="text-2xl font-bold text-slate-600 m-2 inline-block">인공지능</span>
+                            <span class="text-xl text-slate-500 m-2 inline-block">북극항로</span>
+                            <span class="text-xl text-slate-500 m-2 inline-block">세계시장</span>
+                         </div>
+                         <div class="absolute inset-0 bg-white/10 backdrop-blur-[1px]"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between">
+                <button onclick="router('planning')" class="text-slate-500 font-bold hover:text-navy-900"><i class="fa-solid fa-arrow-left mr-2"></i> 이전</button>
+                <button onclick="router('storybook')" class="bg-navy-900 text-white px-8 py-4 rounded-full font-bold hover:bg-rust-500 transition-all shadow-lg">
+                    다음: 스토리북 <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 03. STORYBOOK SECTION -->
+        <!-- ========================================== -->
+        <section id="storybook" class="section-content pt-32 pb-20 max-w-7xl mx-auto px-4 text-center">
+            <div class="max-w-3xl mx-auto py-20">
+                <i class="fa-solid fa-book-open text-6xl text-rust-500 mb-6"></i>
+                <h2 class="text-4xl font-bold text-navy-900 mb-6">Digital Storybook: 영도의 맥박</h2>
+                <p class="text-lg text-slate-600 mb-12">
+                    데이터 분석 결과와 영도 조선소의 감성적 이미지를 결합한<br>
+                    인터랙티브 스토리북을 확인하세요.
+                </p>
+
+                <div class="bg-white p-12 rounded-3xl shadow-xl border border-slate-200 mb-12 transform hover:-translate-y-2 transition-transform duration-300">
+                    <h4 class="font-bold text-xl mb-6 text-navy-900">Contents Preview</h4>
+                    <ul class="text-left space-y-4 text-slate-500 mb-10 mx-auto max-w-xs">
+                        <li><i class="fa-solid fa-check text-rust-500 mr-3"></i> 수리 조선업의 역사와 장인</li>
+                        <li><i class="fa-solid fa-check text-rust-500 mr-3"></i> 데이터로 보는 깡깡이 소리</li>
+                        <li><i class="fa-solid fa-check text-rust-500 mr-3"></i> 미래 비전 인포그래픽</li>
+                    </ul>
+                    <a href="https://gemini.google.com/share/6f38d999e1d1" target="_blank" class="inline-block bg-rust-500 text-white px-10 py-5 rounded-full font-bold hover:bg-rust-600 transition-all shadow-lg text-lg group">
+                        스토리북 전체보기 <i class="fa-solid fa-external-link ml-3 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+
+                <div class="flex justify-between border-t border-slate-200 pt-10">
+                    <button onclick="router('analysis')" class="font-bold text-slate-500 hover:text-navy-900"><i class="fa-solid fa-arrow-left mr-2"></i> 이전 단계</button>
+                    <button onclick="router('video')" class="font-bold text-navy-900 hover:text-rust-500">마지막: 영상보기 <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 04. VIDEO SECTION -->
+        <!-- ========================================== -->
+        <section id="video" class="section-content w-full min-h-screen bg-navy-900 text-white pt-32 pb-20">
+            <div class="max-w-5xl mx-auto px-4 text-center">
+                <span class="text-rust-500 font-bold tracking-widest text-xs uppercase mb-4 block">Documentary Film</span>
+                <h2 class="text-4xl font-bold mb-4">다큐멘터리: 잠든 쇳소리</h2>
+                <p class="text-slate-400 mb-12">과거의 소음이 미래의 리듬이 되기까지의 기록</p>
+
+                <!-- Video Link Block -->
+                <a href="https://drive.google.com/file/d/1AtqBOzjXBrcYAsIucSTagc9xyMkzLJ6w/view?usp=drive_link" target="_blank" class="block group relative bg-black aspect-video rounded-3xl overflow-hidden shadow-2xl mb-12 border border-white/10 flex items-center justify-center hover:border-rust-500 transition-colors">
+                    <!-- Background Placeholder Image -->
+                    <img src="https://images.unsplash.com/photo-1628268956637-25e1a49f572a?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-30 transition-opacity" alt="Video Thumbnail">
+                    
+                    <div class="relative z-10 text-center">
+                        <div class="w-24 h-24 bg-rust-500 rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform shadow-lg shadow-rust-500/50">
+                            <i class="fa-solid fa-play text-4xl ml-2 text-white"></i>
+                        </div>
+                        <p class="font-bold text-xl group-hover:text-rust-500 transition-colors">영상 시청하기 (Google Drive)</p>
+                        <p class="text-sm text-slate-300 mt-2">Running Time 12:45</p>
+                    </div>
+                </a>
+
+                <div class="grid md:grid-cols-2 gap-8 text-left mb-20">
+                    <div class="bg-white/5 p-8 rounded-2xl border border-white/10">
+                        <h4 class="font-bold text-rust-500 mb-2">Director's Note</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed">
+                            현장에서 들리는 쇳소리는 더 이상 소음이 아닌 영도의 심장 박동임을 보여주고 싶었습니다. 주민들의 생생한 인터뷰를 통해 쇠퇴하는 산업을 지키고자 하는 의지를 영상에 담았습니다.
+                        </p>
+                    </div>
+                    <div class="bg-white/5 p-8 rounded-2xl border border-white/10">
+                        <h4 class="font-bold text-blue-400 mb-2">Keywords</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-navy-800 px-3 py-1 rounded-full text-xs text-slate-300 border border-white/10">#깡깡이마을</span>
+                            <span class="bg-navy-800 px-3 py-1 rounded-full text-xs text-slate-300 border border-white/10">#수리조선소</span>
+                            <span class="bg-navy-800 px-3 py-1 rounded-full text-xs text-slate-300 border border-white/10">#인구감소</span>
+                            <span class="bg-navy-800 px-3 py-1 rounded-full text-xs text-slate-300 border border-white/10">#MRO_비전</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button onclick="router('home')" class="bg-white text-navy-900 px-10 py-4 rounded-full font-bold hover:bg-rust-500 hover:text-white transition-all">
+                        메인 화면으로 돌아가기 <i class="fa-solid fa-home ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-navy-900 text-slate-500 py-12 px-4 text-center border-t border-white/10">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <span class="font-bold text-slate-300">Team. 잠든 쇳소리</span>
+                <p class="text-xs mt-1">© 2024 영도구 조선업 인식 조사 프로젝트. All rights reserved.</p>
+            </div>
+            <div class="flex space-x-6">
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-github text-xl"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-youtube text-xl"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-solid fa-envelope text-xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Routing & Charts -->
+    <script>
+        // 1. Simple Router
+        function router(pageId) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
+            
+            // Show target section
+            const target = document.getElementById(pageId);
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+
+            // Update Nav State
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            const activeNav = document.getElementById('nav-' + pageId);
+            if (activeNav) activeNav.classList.add('active');
+        }
+
+        // Mobile Menu Toggle Helper
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // 2. Initialize Charts (Only when DOM is loaded)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Past Chart
+            new Chart(document.getElementById('pastChart').getContext('2d'), {
+                type: 'pie',
+                data: {
+                    labels: ['중립(회상/기억)', '긍정', '부정'],
+                    datasets: [{
+                        data: [60, 30, 10], 
+                        backgroundColor: ['#94a3b8', '#22c55e', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+            });
+
+            // Present Chart
+            new Chart(document.getElementById('presentChart').getContext('2d'), {
+                type: 'pie',
+                data: {
+                    labels: ['부정(우려/심각)', '긍정', '중립'],
+                    datasets: [{
+                        data: [70, 20, 10], 
+                        backgroundColor: ['#ef4444', '#22c55e', '#94a3b8'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+            });
+
+            // Future Chart
+            new Chart(document.getElementById('futureChart').getContext('2d'), {
+                type: 'pie',
+                data: {
+                    labels: ['긍정(기대/비전)', '부정', '중립'],
+                    datasets: [{
+                        data: [65, 25, 10], 
+                        backgroundColor: ['#22c55e', '#ef4444', '#94a3b8'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+            });
+        });
+    </script>
+</body>
+</html>
